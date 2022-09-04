@@ -2,6 +2,7 @@
 
 library material_colorpicker;
 
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -79,10 +80,6 @@ class _MaterialPickerState extends State<MaterialPicker> {
           {Colors.black: ''},
           {Colors.white: ''}
         ]);
-      } else if (colorType is MaterialAccentColor) {
-        result.addAll([100, 200, 400, 700]
-            .map((int shade) => {colorType[shade]!: 'A$shade'})
-            .toList());
       } else if (colorType is MaterialColor) {
         result.addAll([50, 100, 200, 300, 400, 500, 600, 700, 800, 900]
             .map((int shade) => {colorType[shade]!: shade.toString()})
@@ -149,40 +146,40 @@ class _MaterialPickerState extends State<MaterialPicker> {
                           ? const EdgeInsets.fromLTRB(0, 7, 0, 7)
                           : const EdgeInsets.fromLTRB(7, 0, 7, 0),
                       child: Align(
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          width: 35,
-                          height: 35,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: _colorType,
-                            shape: BoxShape.rectangle,
-                            boxShadow: _currentColorType == _colors
-                                ? [
-                                    _colorType == Theme.of(context).cardColor
-                                        ? BoxShadow(
-                                            color:
-                                                (Theme.of(context).brightness ==
-                                                        Brightness.light)
-                                                    ? Colors.grey[300]!
-                                                    : Colors.black38,
-                                            blurRadius: 10,
-                                          )
-                                        : BoxShadow(
-                                            color: _colorType,
-                                            blurRadius: 10,
-                                          ),
-                                  ]
-                                : null,
-                            border: _colorType == Theme.of(context).cardColor
-                                ? Border.all(
-                                    color: (Theme.of(context).brightness ==
-                                            Brightness.light)
-                                        ? Colors.grey[300]!
-                                        : Colors.black38,
-                                    width: 1)
-                                : null,
-                          ),
+                        child: Stack(
+                          children: [
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              width: 35,
+                              height: 35,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: _colorType,
+                                shape: BoxShape.rectangle,
+                                border: _colorType ==
+                                        Theme.of(context).cardColor
+                                    ? Border.all(
+                                        color: (Theme.of(context).brightness ==
+                                                Brightness.light)
+                                            ? Colors.grey[300]!
+                                            : Colors.black38,
+                                        width: 1)
+                                    : null,
+                              ),
+                              child: _currentColorType == _colors
+                                  ? Container(
+                                      // margin: const EdgeInsets.only(
+                                      //     right: 26, top: 5),
+                                      child: const Center(
+                                        child: Icon(
+                                          EvaIcons.checkmark,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -224,90 +221,37 @@ class _MaterialPickerState extends State<MaterialPicker> {
                       : const EdgeInsets.fromLTRB(7, 0, 7, 0),
                   child: Align(
                     child: AnimatedContainer(
-                      curve: Curves.fastOutSlowIn,
-                      duration: const Duration(milliseconds: 500),
-                      width: _isPortrait
-                          ? (_currentShading == _color ? 250 : 230)
-                          : (_currentShading == _color ? 50 : 30),
-                      height: _isPortrait ? 50 : 220,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: _color,
-                        boxShadow: _currentShading == _color
-                            ? [
-                                (_color == Colors.white) ||
-                                        (_color == Colors.black)
-                                    ? BoxShadow(
-                                        color: (Theme.of(context).brightness ==
-                                                Brightness.light)
-                                            ? Colors.grey[300]!
-                                            : Colors.black38,
-                                        blurRadius: 10,
-                                      )
-                                    : BoxShadow(
-                                        color: _color,
-                                        blurRadius: 10,
-                                      ),
-                              ]
-                            : null,
-                        border:
-                            (_color == Colors.white) || (_color == Colors.black)
-                                ? Border.all(
-                                    color: (Theme.of(context).brightness ==
-                                            Brightness.light)
-                                        ? Colors.grey[300]!
-                                        : Colors.black38,
-                                    width: 1)
-                                : null,
-                      ),
-                      child: widget.enableLabel
-                          ? _isPortrait
-                              ? Row(
-                                  children: [
-                                    Text(
-                                      '  ${color.values.first}',
-                                      style: TextStyle(
-                                          color: useWhiteForeground(_color)
-                                              ? Colors.white
-                                              : Colors.black),
-                                    ),
-                                    Expanded(
-                                      child: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Text(
-                                          '#${(_color.toString().replaceFirst('Color(0xff', '').replaceFirst(')', '')).toUpperCase()}  ',
-                                          style: TextStyle(
-                                            color: useWhiteForeground(_color)
-                                                ? Colors.white
-                                                : Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : AnimatedOpacity(
-                                  duration: const Duration(milliseconds: 300),
-                                  opacity: _currentShading == _color ? 1 : 0,
-                                  child: Container(
-                                    padding: const EdgeInsets.only(top: 16),
-                                    alignment: Alignment.topCenter,
-                                    child: Text(
-                                      color.values.first,
-                                      style: TextStyle(
-                                        color: useWhiteForeground(_color)
-                                            ? Colors.white
-                                            : Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      ),
-                                      softWrap: false,
-                                    ),
+                        curve: Curves.fastOutSlowIn,
+                        duration: const Duration(milliseconds: 500),
+                        width: _isPortrait
+                            ? (_currentShading == _color ? 250 : 230)
+                            : (_currentShading == _color ? 50 : 30),
+                        height: _isPortrait ? 50 : 220,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: _color,
+                          border: (_color == Colors.white) ||
+                                  (_color == Colors.black)
+                              ? Border.all(
+                                  color: (Theme.of(context).brightness ==
+                                          Brightness.light)
+                                      ? Colors.grey[300]!
+                                      : Colors.black38,
+                                  width: 1)
+                              : null,
+                        ),
+                        child: _currentShading == _color
+                            ? Container(
+                                child: Center(
+                                  child: Icon(
+                                    EvaIcons.checkmark,
+                                    color: useWhiteForeground(_color)
+                                        ? Colors.white
+                                        : Colors.black,
                                   ),
-                                )
-                          : const SizedBox(),
-                    ),
+                                ),
+                              )
+                            : Container()),
                   ),
                 ),
               );
