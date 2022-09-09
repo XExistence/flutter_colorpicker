@@ -60,7 +60,7 @@ class _MaterialPickerState extends State<MaterialPicker> {
 
     for (Color colorType in colors) {
       if (colorType is MaterialColor) {
-        result.addAll([50, 100, 200, 300, 400, 500, 600, 700, 800, 900]
+        result.addAll([300, 400, 500, 600, 700, 800, 900]
             .map((int shade) => {colorType[shade]!: shade.toString()})
             .toList());
       }
@@ -127,8 +127,8 @@ class _MaterialPickerState extends State<MaterialPicker> {
                           children: [
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
-                              width: 35,
-                              height: 35,
+                              width: _currentColorType == _colors ? 45 : 35,
+                              height: _currentColorType == _colors ? 45 : 35,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: _colorType,
@@ -199,7 +199,7 @@ class _MaterialPickerState extends State<MaterialPicker> {
                   child: Align(
                     child: AnimatedContainer(
                         curve: Curves.fastOutSlowIn,
-                        duration: const Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 300),
                         width: _isPortrait
                             ? (_currentShading == _color ? 250 : 230)
                             : (_currentShading == _color ? 50 : 30),
