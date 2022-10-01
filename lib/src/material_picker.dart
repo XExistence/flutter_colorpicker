@@ -202,7 +202,7 @@ class _MaterialPickerState extends State<MaterialPicker> {
                         duration: const Duration(milliseconds: 300),
                         width: _isPortrait
                             ? (_currentShading == _color ? 250 : 230)
-                            : (_currentShading == _color ? 50 : 30),
+                            : (_currentShading == _color ? 60 : 50),
                         height: _isPortrait ? 50 : 220,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
