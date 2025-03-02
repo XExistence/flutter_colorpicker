@@ -69,6 +69,14 @@ class _MaterialPickerState extends State<MaterialPicker> {
     return result;
   }
 
+  Color _getLastShade(List<Color> colors) {
+    List<Map<Color, String>> shades = _shadingTypes(colors);
+    if (shades.isNotEmpty) {
+      return shades.last.keys.first;
+    }
+    return colors[0];
+  }
+
   @override
   void initState() {
     for (List<Color> _colors in _colorTypes) {
@@ -115,7 +123,12 @@ class _MaterialPickerState extends State<MaterialPicker> {
                     onTap: () {
                       if (widget.onPrimaryChanged != null)
                         widget.onPrimaryChanged!(_colorType);
-                      setState(() => _currentColorType = _colors);
+                      Color lastShade = _getLastShade(_colors);
+                      setState(() {
+                        _currentColorType = _colors;
+                        _currentShading = lastShade;
+                      });
+                      widget.onColorChanged(lastShade);
                     },
                     child: Container(
                       color: const Color(0x00000000),
@@ -134,26 +147,26 @@ class _MaterialPickerState extends State<MaterialPicker> {
                                 color: _colorType,
                                 shape: BoxShape.rectangle,
                                 border: _colorType ==
-                                        Theme.of(context).cardColor
+                                    Theme.of(context).cardColor
                                     ? Border.all(
-                                        color: (Theme.of(context).brightness ==
-                                                Brightness.light)
-                                            ? Colors.grey[300]!
-                                            : Colors.black38,
-                                        width: 1)
+                                    color: (Theme.of(context).brightness ==
+                                        Brightness.light)
+                                        ? Colors.grey[300]!
+                                        : Colors.black38,
+                                    width: 1)
                                     : null,
                               ),
                               child: _currentColorType == _colors
                                   ? Container(
-                                      // margin: const EdgeInsets.only(
-                                      //     right: 26, top: 5),
-                                      child: const Center(
-                                        child: Icon(
-                                          EvaIcons.checkmark,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    )
+                                // margin: const EdgeInsets.only(
+                                //     right: 26, top: 5),
+                                child: const Center(
+                                  child: Icon(
+                                    EvaIcons.checkmark,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
                                   : Container(),
                             ),
                           ],
@@ -208,26 +221,26 @@ class _MaterialPickerState extends State<MaterialPicker> {
                           borderRadius: BorderRadius.circular(10),
                           color: _color,
                           border: (_color == Colors.white) ||
-                                  (_color == Colors.black)
+                              (_color == Colors.black)
                               ? Border.all(
-                                  color: (Theme.of(context).brightness ==
-                                          Brightness.light)
-                                      ? Colors.grey[300]!
-                                      : Colors.black38,
-                                  width: 1)
+                              color: (Theme.of(context).brightness ==
+                                  Brightness.light)
+                                  ? Colors.grey[300]!
+                                  : Colors.black38,
+                              width: 1)
                               : null,
                         ),
                         child: _currentShading == _color
                             ? Container(
-                                child: Center(
-                                  child: Icon(
-                                    EvaIcons.checkmark,
-                                    color: useWhiteForeground(_color)
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                                ),
-                              )
+                          child: Center(
+                            child: Icon(
+                              EvaIcons.checkmark,
+                              color: useWhiteForeground(_color)
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                        )
                             : Container()),
                   ),
                 ),
